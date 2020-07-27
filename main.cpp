@@ -358,13 +358,13 @@ int main(int argc, char** argv){
 //Read in .txt files
         double **dataL;
         int sizeL[2];
-        getFileSize("L.txt", sizeL);
+        getFileSize("Data/L.txt", sizeL);
         dataL = new double*[sizeL[0]];
         for(int i = 0; i < sizeL[0]; i++){
                 dataL[i] = new double[sizeL[1]];
         }
 
-        readFile(dataL, "L.txt", sizeL);
+        readFile(dataL, "Data/L.txt", sizeL);
         fixedPoint **L = new fixedPoint*[sizeL[0]];
         for(int i = 0; i < sizeL[0]; i++){
                 L[i] = new fixedPoint[sizeL[1]];
@@ -378,13 +378,13 @@ int main(int argc, char** argv){
 
         double **dataA;
         int sizeA[2];
-        getFileSize("A.txt", sizeA);
+        getFileSize("Data/A.txt", sizeA);
         dataA = new double*[sizeA[0]];
         for(int i = 0; i < sizeA[0]; i++){
                 dataA[i] = new double[sizeA[1]];
         }
 
-        readFile(dataA, "A.txt", sizeA);
+        readFile(dataA, "Data/A.txt", sizeA);
         fixedPoint **A = new fixedPoint*[sizeA[0]];
         for(int i = 0; i < sizeA[0]; i++){
                 A[i] = new fixedPoint[sizeA[1]];
@@ -398,13 +398,13 @@ int main(int argc, char** argv){
 
         double **dataB;
         int sizeB[2];
-        getFileSize("B.txt", sizeB);
+        getFileSize("Data/B.txt", sizeB);
         dataB = new double*[sizeB[0]];
         for(int i = 0; i < sizeB[0]; i++){
                 dataB[i] = new double[sizeB[1]];
         }
 
-        readFile(dataB, "B.txt", sizeB);
+        readFile(dataB, "Data/B.txt", sizeB);
         fixedPoint **B = new fixedPoint*[sizeB[0]];
         for(int i = 0; i < sizeB[0]; i++){
                 B[i] = new fixedPoint[sizeB[1]];
@@ -418,13 +418,13 @@ int main(int argc, char** argv){
 
         double **dataC;
         int sizeC[2];
-        getFileSize("C.txt", sizeC);
+        getFileSize("Data/C.txt", sizeC);
         dataC = new double*[sizeC[0]];
         for(int i = 0; i < sizeC[0]; i++){
                 dataC[i] = new double[sizeC[1]];
         }
 
-        readFile(dataC, "C.txt", sizeC);
+        readFile(dataC, "Data/C.txt", sizeC);
         fixedPoint **C = new fixedPoint*[sizeC[0]];
         for(int i = 0; i < sizeC[0]; i++){
                 C[i] = new fixedPoint[sizeC[1]];
@@ -438,13 +438,13 @@ int main(int argc, char** argv){
 
         double **dataK;
         int sizeK[2];
-        getFileSize("K.txt", sizeK);
+        getFileSize("Data/K.txt", sizeK);
         dataK = new double*[sizeK[0]];
         for(int i = 0; i < sizeK[0]; i++){
                 dataK[i] = new double[sizeK[1]];
         }
 
-        readFile(dataK, "K.txt", sizeK);
+        readFile(dataK, "Data/K.txt", sizeK);
         fixedPoint **K = new fixedPoint*[sizeK[0]];
         for(int i = 0; i < sizeK[0]; i++){
                 K[i] = new fixedPoint[sizeK[1]];
@@ -458,13 +458,13 @@ int main(int argc, char** argv){
 
         double **dataur;
         int sizeur[2];
-        getFileSize("ur.txt", sizeur);
+        getFileSize("Data/ur.txt", sizeur);
         dataur = new double*[sizeur[0]];
         for(int i = 0; i < sizeur[0]; i++){
                 dataur[i] = new double[sizeur[1]];
         }
 
-        readFile(dataur, "ur.txt", sizeur);
+        readFile(dataur, "Data/ur.txt", sizeur);
         fixedPoint **ur = new fixedPoint*[sizeur[0]];
         for(int i = 0; i < sizeur[0]; i++){
                 ur[i] = new fixedPoint[sizeur[1]];
@@ -478,13 +478,13 @@ int main(int argc, char** argv){
 
         double **dataxr;
         int sizexr[2];
-        getFileSize("xr.txt", sizexr);
+        getFileSize("Data/xr.txt", sizexr);
         dataxr = new double*[sizexr[0]];
         for(int i = 0; i < sizexr[0]; i++){
                 dataxr[i] = new double[sizexr[1]];
         }
 
-        readFile(dataxr, "xr.txt", sizexr);
+        readFile(dataxr, "Data/xr.txt", sizexr);
         fixedPoint **xr = new fixedPoint*[sizexr[0]];
         for(int i = 0; i < sizexr[0]; i++){
                 xr[i] = new fixedPoint[sizexr[1]];
@@ -498,13 +498,13 @@ int main(int argc, char** argv){
 
         double **datax0;
         int sizex0[2];
-        getFileSize("x0.txt", sizex0);
+        getFileSize("Data/x0.txt", sizex0);
         datax0 = new double*[sizex0[0]];
         for(int i = 0; i < sizex0[0]; i++){
                 datax0[i] = new double[sizex0[1]];
         }
 
-        readFile(datax0, "x0.txt", sizex0);
+        readFile(datax0, "Data/x0.txt", sizex0);
         fixedPoint **x0 = new fixedPoint*[sizex0[0]];
         for(int i = 0; i < sizex0[0]; i++){
                 x0[i] = new fixedPoint[sizex0[1]];
