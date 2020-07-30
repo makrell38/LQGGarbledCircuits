@@ -89,7 +89,7 @@ class fixedPoint {
                         fractPart = 1 + fractPart;
                 }
                 bool_dat(b, 24, (long long)intPart, 24);
-                bool_dat(b, 24, (long long)(fractPart * pow(2,24)), 0);
+                bool_dat(b, 24, (long long)round(fractPart * pow(2,24)), 0);
                 in_it(dest, b, 48, party);
         }
 
@@ -353,28 +353,10 @@ int main(int argc, char** argv){
         parse_party_and_port(argv, &party, &port);
         NetIO * io = new NetIO(party==ALICE ? nullptr: "127.0.0.1", port);
         setup_semi_honest(io, party);
+        bool print = 0;
 
 
 //Read in .txt files
-        double **dataL;
-        int sizeL[2];
-        getFileSize("Data/L.txt", sizeL);
-        dataL = new double*[sizeL[0]];
-        for(int i = 0; i < sizeL[0]; i++){
-                dataL[i] = new double[sizeL[1]];
-        }
-
-        readFile(dataL, "Data/L.txt", sizeL);
-        fixedPoint **L = new fixedPoint*[sizeL[0]];
-        for(int i = 0; i < sizeL[0]; i++){
-                L[i] = new fixedPoint[sizeL[1]];
-        }
-
-        for(int i = 0; i <sizeL[0]; i++){
-                for(int j = 0; j < sizeL[1]; j++){
-                        L[i][j] = fixedPoint(dataL[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **dataA;
         int sizeA[2];
@@ -390,11 +372,6 @@ int main(int argc, char** argv){
                 A[i] = new fixedPoint[sizeA[1]];
         }
 
-        for(int i = 0; i <sizeA[0]; i++){
-                for(int j = 0; j < sizeA[1]; j++){
-                        A[i][j] = fixedPoint(dataA[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **dataB;
         int sizeB[2];
@@ -410,11 +387,6 @@ int main(int argc, char** argv){
                 B[i] = new fixedPoint[sizeB[1]];
         }
 
-        for(int i = 0; i <sizeB[0]; i++){
-                for(int j = 0; j < sizeB[1]; j++){
-                        B[i][j] = fixedPoint(dataB[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **dataC;
         int sizeC[2];
@@ -430,11 +402,6 @@ int main(int argc, char** argv){
                 C[i] = new fixedPoint[sizeC[1]];
         }
 
-        for(int i = 0; i <sizeC[0]; i++){
-                for(int j = 0; j < sizeC[1]; j++){
-                        C[i][j] = fixedPoint(dataC[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **dataK;
         int sizeK[2];
@@ -449,11 +416,19 @@ int main(int argc, char** argv){
         for(int i = 0; i < sizeK[0]; i++){
                 K[i] = new fixedPoint[sizeK[1]];
         }
-        //negative because K.txt holds the nagation of the control gain K
-        for(int i = 0; i <sizeK[0]; i++){
-                for(int j = 0; j < sizeK[1]; j++){
-                        K[i][j] = fixedPoint(-(dataK[i][j]), 24, 24, ALICE);
-                }
+
+        double **dataL;
+        int sizeL[2];
+        getFileSize("Data/L.txt", sizeL);
+        dataL = new double*[sizeL[0]];
+        for(int i = 0; i < sizeL[0]; i++){
+                dataL[i] = new double[sizeL[1]];
+        }
+
+        readFile(dataL, "Data/L.txt", sizeL);
+        fixedPoint **L = new fixedPoint*[sizeL[0]];
+        for(int i = 0; i < sizeL[0]; i++){
+                L[i] = new fixedPoint[sizeL[1]];
         }
 
         double **dataur;
@@ -470,11 +445,6 @@ int main(int argc, char** argv){
                 ur[i] = new fixedPoint[sizeur[1]];
         }
 
-        for(int i = 0; i <sizeur[0]; i++){
-                for(int j = 0; j < sizeur[1]; j++){
-                        ur[i][j] = fixedPoint(dataur[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **dataxr;
         int sizexr[2];
@@ -490,11 +460,6 @@ int main(int argc, char** argv){
                 xr[i] = new fixedPoint[sizexr[1]];
         }
 
-        for(int i = 0; i <sizexr[0]; i++){
-                for(int j = 0; j < sizexr[1]; j++){
-                        xr[i][j] = fixedPoint(dataxr[i][j], 24, 24, ALICE);
-                }
-        }
 
         double **datax0;
         int sizex0[2];
@@ -510,11 +475,63 @@ int main(int argc, char** argv){
                 x0[i] = new fixedPoint[sizex0[1]];
         }
 
+
+
+//Encrypt Inputs
+auto startEncSet = clock_start();
+        for(int i = 0; i <sizeA[0]; i++){
+                for(int j = 0; j < sizeA[1]; j++){
+                        A[i][j] = fixedPoint(dataA[i][j], 24, 24, ALICE);
+                }
+        }
+
+        for(int i = 0; i <sizeB[0]; i++){
+                for(int j = 0; j < sizeB[1]; j++){
+                        B[i][j] = fixedPoint(dataB[i][j], 24, 24, ALICE);
+                }
+        }
+
+        for(int i = 0; i <sizeC[0]; i++){
+                for(int j = 0; j < sizeC[1]; j++){
+                        C[i][j] = fixedPoint(dataC[i][j], 24, 24, ALICE);
+                }
+        }
+
+        //negative because K.txt holds the nagation of the control gain K
+        for(int i = 0; i <sizeK[0]; i++){
+                for(int j = 0; j < sizeK[1]; j++){
+                        K[i][j] = fixedPoint(-(dataK[i][j]), 24, 24, ALICE);
+                }
+        }
+
+        for(int i = 0; i <sizeL[0]; i++){
+                for(int j = 0; j < sizeL[1]; j++){
+                        L[i][j] = fixedPoint(dataL[i][j], 24, 24, ALICE);
+                }
+        }
+
+cout<<fixed<<setprecision(5)<<"Time for Encrypt setup: "<<time_from(startEncSet)<<endl;
+
+auto startEncSub = clock_start();
+        for(int i = 0; i <sizeur[0]; i++){
+                for(int j = 0; j < sizeur[1]; j++){
+                        ur[i][j] = fixedPoint(dataur[i][j], 24, 24, ALICE);
+                }
+        }
+
+        for(int i = 0; i <sizexr[0]; i++){
+                for(int j = 0; j < sizexr[1]; j++){
+                        xr[i][j] = fixedPoint(dataxr[i][j], 24, 24, ALICE);
+                }
+        }
+
         for(int i = 0; i <sizex0[0]; i++){
                 for(int j = 0; j < sizex0[1]; j++){
                         x0[i][j] = fixedPoint(datax0[i][j], 24, 24, ALICE);
                 }
         }
+
+cout<<"Time for Encrypt subsystems: "<<time_from(startEncSub)<<endl;
 
 
 //Initialize needed variables
@@ -663,11 +680,10 @@ int main(int argc, char** argv){
 
 
 
-
 //Start computations
 
 //Setup computing constants
-        //auto setupConStart = clock_start();
+        auto setupConStart = clock_start();
 
         //compute gamma3
         matrixMul(L,C,LC, sizeL, sizeC);
@@ -688,11 +704,11 @@ int main(int argc, char** argv){
                         gamma1[i][j] = (A[i][j] - LCA[i][j]) - gamma2[i][j];
                 }
         }
-        //cout<<fixed<<setprecision(7)<<"Time for setup to compute constants: "<<time_from(setupConStart) *.000001 <<" seconds"<<endl;
+
+        cout<<"Time for setup to compute constants: "<<time_from(setupConStart)<<endl;
 
 //Cloud computing constants
-        //auto cloudConStart = clock_start();
-
+        auto cloudConStart = clock_start();
         //compute uTiler
         matrixMul(K, xr, Kxr, sizeK, sizexr);
         for(int i = 0; i < sizeuTilder[0]; i++){
@@ -709,12 +725,20 @@ int main(int argc, char** argv){
                         xGamma[i][j] = gamma3ur[i][j] + gamma2xr[i][j];
                 }
         }
-        //cout<<"Time for cloud to compute constants: "<<time_from(cloudConStart)*.000001<<" senconds"<<endl;
+        cout<<"Time for cloud to compute constants: "<<time_from(cloudConStart)<<endl;
 
 
 //Start computations
+auto start = clock_start();
         int k = 0;
-                uK(K, x0, uTilder, uk, sizeK);
+        //Compute u0
+        uK(K, x0, uTilder, uk, sizeK);
+        //Compute x(k+1)
+        measureState(A, xtemp, B, uk, xk, sizeA, sizeB);
+        //compute zk with no noise
+        matrixMul(C, xk, zk, sizeC, sizexk);
+
+        if(print){
                 cout<<"u"<<0<<":  "<<endl;
                 for(int i = 0; i < sizeuk[0]; i++){
                         for(int j = 0; j < sizeuk[1]; j++){
@@ -723,11 +747,6 @@ int main(int argc, char** argv){
                         cout<<endl;
                 }
                 cout<<endl<<endl;
-
-                measureState(A, xtemp, B, uk, xk, sizeA, sizeB);
-
-                //compute zk with no noise
-                matrixMul(C, xk, zk, sizeC, sizexk);
                 cout<<"z"<<k<<":  "<<endl;
                 for(int i = 0; i < sizezk[0]; i++){
                         for(int j = 0; j < sizezk[1]; j++){
@@ -736,10 +755,11 @@ int main(int argc, char** argv){
                         cout<<endl;
                 }
                 cout<<endl<<endl;
-
-//long long time = 0;
-//long long hold = 0;
-
+        }
+long long timeCloud = 0;
+long long holdCloud = 0;
+long long timeSub = 0;
+long long holdSub = 0;
         //Start loop
         for(k=1;k<5;k++){
                 for(int i = 0; i < sizexHattemp[0]; i++){
@@ -747,32 +767,16 @@ int main(int argc, char** argv){
                                 xHattemp[i][j] = xHatk[i][j];
                         }
                 }
-//auto startCloudOnline = clock_start();
+auto startCloudOnline = clock_start();
 
                 //Compute state estimate xHat
                 xHat(gamma1, xHattemp, L, zk, xGamma, xHatk, sizegamma1);
-                cout<<"xHat"<<k<<":  "<<endl;
-                for(int i = 0; i < sizexHatk[0]; i++){
-                        for(int j = 0; j < sizexHatk[1]; j++){
-                                cout<<xHatk[i][j].reveal<double>(BOB)<<", ";
-                        }
-                        cout<<endl;
-                }
-                cout<<endl<<endl;
 
                 //compute uk
                 uK(K, xHatk, uTilder, uk, sizeK);
-//hold=time_from(startCloudOnline);
-//cout<<"Time for cloud computations: "<<hold<<endl;
-//time+=hold;
-                cout<<"u"<<k<<":  "<<endl;
-                for(int i = 0; i < sizeuk[0]; i++){
-                        for(int j = 0; j < sizeuk[1]; j++){
-                                cout<<uk[i][j].reveal<double>(BOB)<<", ";
-                        }
-                        cout<<endl;
-                }
-                cout<<endl<<endl;
+holdCloud=time_from(startCloudOnline);
+cout<<"Time for cloud computations: "<<time_from(startCloudOnline)<<endl;
+timeCloud+=holdCloud;
 
                 for(int i = 0; i < sizextemp[0]; i++){
                         for(int j = 0; j < sizextemp[1]; j++){
@@ -781,23 +785,47 @@ int main(int argc, char** argv){
                 }
 
                 //measure state ie. compute xk
+auto startSysComp = clock_start();
                 measureState(A, xtemp, B, uk, xk, sizeA, sizeB);
 
                 //compute zk with no noise
                 matrixMul(C, xk, zk, sizeC, sizexk);
-                cout<<"z"<<k<<":  "<<endl;
-                for(int i = 0; i < sizezk[0]; i++){
-                        for(int j = 0; j < sizezk[1]; j++){
-                                cout<<zk[i][j].reveal<double>(BOB)<<", ";
+holdSub = time_from(startSysComp);
+cout<<"Time for subsystem computations: "<<time_from(startSysComp)<<endl;
+timeSub+=holdSub;
+
+                if(print){
+                        cout<<"xHat"<<k<<":  "<<endl;
+                        for(int i = 0; i < sizexHatk[0]; i++){
+                                for(int j = 0; j < sizexHatk[1]; j++){
+                                        cout<<xHatk[i][j].reveal<double>(BOB)<<", ";
+                                }
+                                cout<<endl;
                         }
-                        cout<<endl;
+                        cout<<endl<<endl;
+                        cout<<"u"<<k<<":  "<<endl;
+                        for(int i = 0; i < sizeuk[0]; i++){
+                                for(int j = 0; j < sizeuk[1]; j++){
+                                        cout<<uk[i][j].reveal<double>(BOB)<<", ";
+                                }
+                                cout<<endl;
+                        }
+                        cout<<endl<<endl;
+                        cout<<"z"<<k<<":  "<<endl;
+                        for(int i = 0; i < sizezk[0]; i++){
+                                for(int j = 0; j < sizezk[1]; j++){
+                                        cout<<zk[i][j].reveal<double>(BOB)<<", ";
+                                }
+                                cout<<endl;
+                        }
+                        cout<<endl<<endl;
+
                 }
-                cout<<endl<<endl;
-
         }
+cout<<"total time: "<<time_from(start)<<endl;
 
-
-//cout<<"Average time: "<<time/100<<endl;
+//cout<<"Average time for cloud: "<<timeCloud/100<<endl;
+//cout<<"Average time for subsystems: "<<timeSub/100<<endl;
 
         delete io;
         return 0;
