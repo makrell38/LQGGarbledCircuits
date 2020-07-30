@@ -177,6 +177,8 @@ class fixedPoint {
                 Bit zero(0, PUBLIC);
                 Bit * sum = new Bit[96];
                 Bit * temp = new Bit[49];
+                Bit over = zero;
+                Bit s;
                 for(int i = 0; i < 96; i++){
                         sum[i] = false;
                 }
@@ -200,7 +202,20 @@ class fixedPoint {
                         }
                         full_adder(sum+i, temp, nullptr, nullptr, sum+i, 49);
                 }
-                memcpy(ret, sum+24, sizeof(Bit)*48);
+
+                s = a[47]^b[47];
+                for(int i = 72; i < 96; i++){
+                        over = over | (sum[i]^sum[47]);
+                }
+                for(int i = 48; i < 71; i++){
+                        ret[i-24] = (over&(!s)) | ((!over)&sum[i]);
+                        ret[i-48] = sum[i-24];
+                }
+                ret[47] = (over&s) | ((!over)&sum[71]);
+                ret[23] = sum[47];
+
+
+//              memcpy(ret, sum+24, sizeof(Bit)*48);
                 delete[] sum;
                 delete[] temp;
         }
