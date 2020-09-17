@@ -19,14 +19,15 @@ int main(int argc, char** argv){
         Cloud *cloud = new Cloud();
         subsystem->inputData();
         setup->inputData();
+
 auto startSetupConst = clock_start();
         setup->computeConstants();
-cout<<time_from(startSetupConst)<<endl;
+cout<<"Time for setup to compute constants: "<<time_from(startSetupConst)<<endl;
 
 auto startCloudConst = clock_start();
         cloud->getInputs(setup->L, setup->sizeL, setup->K, setup->sizeK, setup->gamma3, setup->sizegamma3, setup->gamma2, setup->sizegamma2, setup->gamma1, setup->sizegamma1, subsystem->xr, subsystem->sizexr, subsystem->ur, subsystem->sizeur, subsystem->x0, subsystem->sizex0);
         cloud->computeConstants();
-cout<<time_from(startCloudConst)<<endl;
+cout<<"Time for cloud to compute constants: "<<time_from(startCloudConst)<<endl;
 
         int k = 0;
 auto start = clock_start();
@@ -35,7 +36,6 @@ auto start = clock_start();
         subsystem->computezk();
 
 auto startAct = clock_start();
-        for(int i = 0; i <
 
         if(print){
                 cout<<"u"<<0<<":  "<<endl;
@@ -100,7 +100,7 @@ auto startAct = clock_start();
                 }
 
         }
-cout<<time_from(start)<<endl;
+cout<<"Time for 5 iterations: "<<time_from(start)<<endl;
 //cout<<"Average Cloud comp time: "<<timeCloud/100<<endl;
 //cout<<"Average Sub comp time: "<<timeSub/100<<endl;
 
